@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+RED='\033[0;31m'
+NC='\033[0m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+
+progress-bar() {
+  local current=$1
+  local len=$2
+  local perc_done=$((current * 100 / len))
+  local cols=$(tput cols)
+  local length=$((cols / 2))
+  local num_bars=$((perc_done * length / 100))
+  local barchar='#'
+  local spacechar='-'
+  local i
+  local s='['
+  for ((i = 0; i < num_bars; i++)); do
+    s+="$BLUE$barchar$NC"
+  done
+  for ((i = num_bars; i < length; i++)); do
+    s+="$spacechar"
+  done
+  s+=']'
+
+  echo -ne "$s $current/$len ($perc_done%)\r"
+}
+
+process-files(){
+        mv "$1" "$2"
+}
+
+shopt -s dotglob
+S_URL=$1
+E_URL=$2
+
+songs=($S_URL/*)
+size=${#songs[@]}
+for ((i=0; i < size; i++)) do
+        progress-bar "$((i+1))" "$size"
+        process-files "${songs[$i]}" "$E_URL"
+done
+progress-bar "$size" "$size"
+echo
+

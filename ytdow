@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+./download "$1"
+
+./transfer ./musicas/ /media/$USER/*
+rm -r musicas/
+
+
