@@ -5,4 +5,3 @@
 ./transfer ./musicas/ /media/$USER/*
 rm -r musicas/
 
-
